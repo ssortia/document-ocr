@@ -1,0 +1,6 @@
+paddleocr[doc-parser]
+opencv-python-headless
+Pillow
+fastapi
+uvicorn[standard]
+python-multipart

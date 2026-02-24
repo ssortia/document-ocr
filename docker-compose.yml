@@ -1,0 +1,21 @@
+services:
+  ocr:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./documents:/app/documents
+      - ./output:/app/output
+    environment:
+      # Paddle allocates GPU memory on demand instead of pre-reserving ~92% upfront.
+      # Required so the VLM (0.9B) and layout detection model can coexist in 6GB VRAM.
+      FLAGS_fraction_of_gpu_memory_to_use: "0"
+      PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK: "True"
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
